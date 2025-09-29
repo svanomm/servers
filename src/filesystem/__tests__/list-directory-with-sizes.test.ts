@@ -5,14 +5,14 @@ import { z } from 'zod';
 describe('ListDirectoryWithSizesArgsSchema', () => {
   const ListDirectoryWithSizesArgsSchema = z.object({
     path: z.string(),
-    sortBy: z.enum(['name', 'size', 'mtime']).optional().default('name').describe('Sort entries by name, size, or mtime (last modified time)'),
+    sortBy: z.enum(['name', 'size', 'modified']).optional().default('name').describe('Sort entries by name, size, or modified (last modified time)'),
   });
 
   it('should accept valid sortBy values', () => {
     expect(() => ListDirectoryWithSizesArgsSchema.parse({ path: '/test' })).not.toThrow();
     expect(() => ListDirectoryWithSizesArgsSchema.parse({ path: '/test', sortBy: 'name' })).not.toThrow();
     expect(() => ListDirectoryWithSizesArgsSchema.parse({ path: '/test', sortBy: 'size' })).not.toThrow();
-    expect(() => ListDirectoryWithSizesArgsSchema.parse({ path: '/test', sortBy: 'mtime' })).not.toThrow();
+    expect(() => ListDirectoryWithSizesArgsSchema.parse({ path: '/test', sortBy: 'modified' })).not.toThrow();
   });
 
   it('should reject invalid sortBy values', () => {
@@ -32,7 +32,7 @@ describe('ListDirectoryWithSizesArgsSchema', () => {
     const resultSize = ListDirectoryWithSizesArgsSchema.parse({ path: '/test', sortBy: 'size' });
     expect(resultSize.sortBy).toBe('size');
 
-    const resultMtime = ListDirectoryWithSizesArgsSchema.parse({ path: '/test', sortBy: 'mtime' });
-    expect(resultMtime.sortBy).toBe('mtime');
+    const resultModified = ListDirectoryWithSizesArgsSchema.parse({ path: '/test', sortBy: 'modified' });
+    expect(resultModified.sortBy).toBe('modified');
   });
 });

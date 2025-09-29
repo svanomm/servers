@@ -120,7 +120,7 @@ const ListDirectoryArgsSchema = z.object({
 
 const ListDirectoryWithSizesArgsSchema = z.object({
   path: z.string(),
-  sortBy: z.enum(['name', 'size', 'mtime']).optional().default('name').describe('Sort entries by name, size, or mtime (last modified time)'),
+  sortBy: z.enum(['name', 'size', 'modified']).optional().default('name').describe('Sort entries by name, size, or modified (last modified time)'),
 });
 
 const DirectoryTreeArgsSchema = z.object({
@@ -492,7 +492,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           if (parsed.data.sortBy === 'size') {
             return b.size - a.size; // Descending by size
           }
-          if (parsed.data.sortBy === 'mtime') {
+          if (parsed.data.sortBy === 'modified') {
             return b.mtime.getTime() - a.mtime.getTime(); // Descending by last modified time (newest first)
           }
           // Default sort by name

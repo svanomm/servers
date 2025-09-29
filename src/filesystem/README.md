@@ -124,7 +124,7 @@ The server's directory access control follows this flow:
   - List directory contents with [FILE] or [DIR] prefixes, including file sizes
   - Inputs:
     - `path` (string): Directory path to list
-    - `sortBy` (string, optional): Sort entries by "name", "size", or "mtime" (last modified time) (default: "name")
+    - `sortBy` (string, optional): Sort entries by "name", "size", or "modified" (last modified time) (default: "name")
   - Returns detailed listing with file sizes and summary statistics
   - Shows total files, directories, and combined size
 
