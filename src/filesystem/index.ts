@@ -120,7 +120,7 @@ const ListDirectoryArgsSchema = z.object({
 
 const ListDirectoryWithSizesArgsSchema = z.object({
   path: z.string(),
-  sortBy: z.enum(['name', 'size']).optional().default('name').describe('Sort entries by name or size'),
+  sortBy: z.enum(['name', 'size', 'mtime']).optional().default('name').describe('Sort entries by name, size, or mtime (last modified time)'),
 });
 
 const DirectoryTreeArgsSchema = z.object({
@@ -255,7 +255,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           "Get a detailed listing of all files and directories in a specified path, including sizes. " +
           "Results clearly distinguish between files and directories with [FILE] and [DIR] " +
           "prefixes. This tool is useful for understanding directory structure and " +
-          "finding specific files within a directory. Only works within allowed directories.",
+          "finding specific files within a directory. Can sort by name, size, or last modified time. Only works within allowed directories.",
         inputSchema: zodToJsonSchema(ListDirectoryWithSizesArgsSchema) as ToolInput,
       },
       {
@@ -491,6 +491,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const sortedEntries = [...detailedEntries].sort((a, b) => {
           if (parsed.data.sortBy === 'size') {
             return b.size - a.size; // Descending by size
+          }
+          if (parsed.data.sortBy === 'mtime') {
+            return b.mtime.getTime() - a.mtime.getTime(); // Descending by last modified time (newest first)
           }
           // Default sort by name
           return a.name.localeCompare(b.name);
